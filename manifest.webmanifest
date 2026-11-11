@@ -1,0 +1,21 @@
+{
+  "name": "Pilot Trainer PPL",
+  "short_name": "Pilot Trainer",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#071521",
+  "theme_color": "#071521",
+  "description": "Entrenador de rumbos, patrón de tránsito y VOR para piloto privado.",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
