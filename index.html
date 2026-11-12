@@ -1,107 +1,616 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#071521">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Piloto PPL</title>
+<meta name="theme-color" content="#0a1626">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Pilot Trainer">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>Pilot Trainer PPL</title>
+<meta name="apple-mobile-web-app-title" content="Piloto PPL">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
 <style>
-:root{--bg:#071521;--panel:#102536;--panel2:#142e40;--line:#24465b;--text:#edf5f8;--muted:#9bb0bd;--cyan:#54d5e8;--amber:#ffbf5b;--green:#66d6a3;--red:#ff7777}
-*{box-sizing:border-box} body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1b3b50 0%,var(--bg) 58%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
-button,input{font:inherit} .app{max-width:720px;margin:auto;padding:env(safe-area-inset-top) 18px calc(24px + env(safe-area-inset-bottom))}
-header{display:flex;align-items:center;justify-content:space-between;padding:22px 0 18px;border-bottom:1px solid var(--line)}
-.brand{display:flex;gap:12px;align-items:center}.logo{width:42px;height:42px;border:1px solid var(--cyan);border-radius:12px;display:grid;place-items:center;color:var(--cyan);font-size:21px;background:#0b2637}
-.eyebrow{font-size:10px;letter-spacing:2px;color:var(--cyan);font-weight:800}.brand h1{font-size:18px;margin:3px 0 0;letter-spacing:.6px}.status{font-size:10px;color:var(--green);letter-spacing:1px}
-.screen{display:none}.screen.active{display:block}.hero{padding:25px 0 20px}.hero h2{font-size:27px;line-height:1.12;margin:8px 0}.hero p{color:var(--muted);line-height:1.5;margin:8px 0 0;font-size:14px}
-.section-label{font-size:10px;letter-spacing:1.8px;color:var(--muted);font-weight:800;margin:22px 0 10px}
-.module{width:100%;display:flex;align-items:center;gap:14px;text-align:left;background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:17px;margin:10px 0;color:var(--text)}
-.module:active,.btn:active{transform:scale(.99)}.module .symbol{width:46px;height:46px;border-radius:13px;background:#0a1d2b;border:1px solid #2b596d;display:grid;place-items:center;color:var(--cyan);font-size:22px;flex-shrink:0}
-.module strong{display:block;font-size:15px}.module small{display:block;color:var(--muted);font-size:12px;margin-top:4px}.chev{margin-left:auto;color:var(--cyan);font-size:22px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:20px}.stat{background:#0c2030;border:1px solid var(--line);border-radius:13px;padding:12px}.stat b{font-size:21px;display:block}.stat span{font-size:10px;color:var(--muted);letter-spacing:1px}
-.topline{display:flex;align-items:center;justify-content:space-between;padding:22px 0 10px}.back{border:0;background:none;color:var(--cyan);padding:8px 0}.pill{font-size:11px;color:var(--amber);border:1px solid #76572c;border-radius:30px;padding:6px 10px}
-.progress{height:5px;background:#20394a;border-radius:8px;overflow:hidden;margin:10px 0 20px}.progress>i{display:block;height:100%;background:var(--cyan);width:0;transition:width .2s}
-.question-card{background:linear-gradient(145deg,#142f42,#0d2130);border:1px solid var(--line);border-radius:18px;padding:21px 18px;margin:14px 0}.qtype{color:var(--cyan);font-size:10px;letter-spacing:1.8px;font-weight:800}.question{font-size:22px;font-weight:700;line-height:1.3;margin:14px 0}.subquestion{color:var(--muted);font-size:13px;line-height:1.5}
-.instrument{margin:16px auto 8px;width:178px;height:178px;border:1px solid #477084;border-radius:50%;position:relative;background:radial-gradient(circle,#102b3d 0%,#081a28 70%);display:grid;place-items:center}
-.instrument:before{content:"";position:absolute;inset:12px;border:1px dashed #527184;border-radius:50%}.instrument .heading{font-size:28px;font-weight:800;color:var(--cyan)}.instrument .north{position:absolute;top:15px;color:var(--amber);font-size:11px}.instrument .needle{position:absolute;width:2px;height:58px;background:var(--amber);top:31px;left:50%;transform-origin:bottom;transform:translateX(-50%) rotate(0deg)}
-.answer-wrap{display:flex;gap:9px;margin:16px 0}.answer-wrap input{min-width:0;flex:1;background:#061622;border:1px solid #34566a;border-radius:12px;color:white;padding:15px;font-size:20px;letter-spacing:2px;text-align:center;outline:none}.answer-wrap input:focus{border-color:var(--cyan)}.unit{align-self:center;color:var(--muted);font-size:12px}
-.btn{border:0;border-radius:12px;padding:15px 18px;font-weight:800;cursor:pointer}.primary{background:var(--cyan);color:#06202b;width:100%}.secondary{background:#183448;color:var(--text);border:1px solid var(--line);width:100%}.btnrow{display:flex;gap:10px;margin-top:12px}.btnrow .btn{flex:1}
-.feedback{display:none;border-radius:12px;padding:13px;margin:12px 0;font-size:13px;line-height:1.45}.feedback.show{display:block}.feedback.good{background:#10382f;border:1px solid #28785f;color:#b8f3d9}.feedback.bad{background:#3a2024;border:1px solid #85434b;color:#ffd1d1}
-.hint{font-size:11px;color:var(--muted);text-align:center;margin:12px 0}.result{text-align:center;padding:35px 8px}.result .score{font-size:54px;color:var(--cyan);font-weight:800}.result h2{margin:8px}.result p{color:var(--muted);line-height:1.5}
-.history-row{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:12px 0;font-size:13px}.history-row span:last-child{color:var(--cyan);font-weight:700}
-footer{color:#668091;font-size:10px;text-align:center;padding:25px 0 10px;line-height:1.5}
-@media(min-width:600px){.app{padding-left:28px;padding-right:28px}.module{padding:19px}.hero h2{font-size:34px}}
+:root{
+  --bg:#0a1626; --panel:#11233a; --panel2:#18304d; --line:#25466b;
+  --text:#e8f1fb; --dim:#8aa4c2; --cyan:#3fd0ff; --amber:#ffb020;
+  --green:#3ddc84; --red:#ff5c5c; --white:#ffffff;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-user-select:none;user-select:none;overscroll-behavior:none}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background:radial-gradient(ellipse at top,#132a46 0%,var(--bg) 60%) fixed}
+.app{max-width:520px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding:12px 14px 18px}
+.screen{display:none;flex-direction:column;gap:12px;flex:1}
+.screen.on{display:flex}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+
+/* header */
+.brand{display:flex;align-items:center;gap:12px;padding:6px 2px 4px}
+.brand svg{flex:none}
+.brand h1{margin:0;font-size:22px;letter-spacing:.14em;font-weight:800}
+.brand small{display:block;color:var(--cyan);font-family:var(--mono);font-size:11px;letter-spacing:.2em;margin-top:2px}
+
+.panel{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);
+  border-radius:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 6px 20px rgba(0,0,0,.25)}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--dim);text-transform:uppercase}
+
+/* menu */
+.mods{display:grid;gap:10px}
+.mod{display:flex;align-items:center;gap:14px;padding:14px;text-align:left;width:100%}
+.mod:active{transform:scale(.985);border-color:var(--cyan)}
+.mod .ico{width:52px;height:52px;flex:none;border-radius:12px;background:#0b1b2e;border:1px solid var(--line);display:grid;place-items:center}
+.mod b{display:block;font-size:17px}
+.mod span{display:block;color:var(--dim);font-size:13px;margin-top:2px}
+.mod .best{margin-left:auto;text-align:right;font-family:var(--mono);font-size:12px;color:var(--cyan);flex:none}
+.mod .best i{display:block;font-style:normal;color:var(--dim);font-size:10px;letter-spacing:.1em}
+
+.settings{padding:12px 14px;display:grid;gap:10px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.seg{display:flex;background:#0b1b2e;border:1px solid var(--line);border-radius:10px;padding:3px}
+.seg button{background:none;padding:7px 12px;border-radius:7px;font-size:13px;color:var(--dim);font-weight:600}
+.seg button.on{background:var(--cyan);color:#05223a}
+.link{background:none;color:var(--cyan);font-size:14px;padding:10px;font-weight:600}
+
+/* quiz */
+.topbar{display:flex;align-items:center;gap:10px}
+.back{background:#0b1b2e;border:1px solid var(--line);width:40px;height:40px;border-radius:10px;font-size:18px}
+.chip{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--amber);text-transform:uppercase}
+.stats{display:flex;gap:6px;margin-left:auto}
+.stat{background:#07111e;border:1px solid var(--line);border-radius:8px;padding:5px 9px;text-align:center;min-width:58px}
+.stat i{display:block;font-style:normal;font-size:9px;letter-spacing:.14em;color:var(--dim)}
+.stat b{font-family:var(--mono);font-size:15px;color:var(--green)}
+.stat.t b{color:var(--cyan)}
+.progress{height:4px;background:#07111e;border-radius:4px;overflow:hidden}
+.progress div{height:100%;background:var(--cyan);width:0;transition:width .3s}
+
+.inst{padding:8px;display:grid;place-items:center}
+.inst svg{width:100%;max-width:300px;height:auto;display:block}
+.qtext{padding:12px 14px;font-size:17px;line-height:1.4;min-height:64px}
+.qtext b{color:var(--amber);font-family:var(--mono)}
+
+.answer{display:flex;align-items:center;gap:10px}
+.lcd{flex:1;background:#020a12;border:1px solid var(--line);border-radius:12px;padding:8px 14px;
+  font-family:var(--mono);font-size:34px;letter-spacing:.2em;color:var(--green);text-shadow:0 0 10px rgba(61,220,132,.5);text-align:center}
+.lcd.empty{color:#1f4a35;text-shadow:none}
+.lcd.bad{color:var(--red);text-shadow:0 0 10px rgba(255,92,92,.5)}
+
+.feedback{display:none;padding:12px 14px;border-radius:14px;font-size:15px;line-height:1.45}
+.feedback.ok{display:block;background:rgba(61,220,132,.12);border:1px solid var(--green)}
+.feedback.no{display:block;background:rgba(255,92,92,.12);border:1px solid var(--red)}
+.feedback strong{display:block;font-size:16px;margin-bottom:3px}
+.feedback.ok strong{color:var(--green)} .feedback.no strong{color:var(--red)}
+
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:auto}
+.pad button{height:54px;border-radius:12px;background:linear-gradient(180deg,#1f3b5d,#16304d);border:1px solid var(--line);
+  font-family:var(--mono);font-size:22px;font-weight:600;box-shadow:0 2px 0 #06101c}
+.pad button:active{transform:translateY(2px);box-shadow:none}
+.pad .del{color:var(--amber);font-size:18px}
+.pad .go{background:linear-gradient(180deg,#2a8fd6,#1e6fae);border-color:#3fa6ee;font-family:inherit;font-size:16px;letter-spacing:.08em;font-weight:800}
+.pad .go.next{background:linear-gradient(180deg,#2fbf73,#21945a);border-color:#3ddc84}
+
+/* results */
+.big{padding:20px 16px;text-align:center}
+.big .pct{font-family:var(--mono);font-size:64px;font-weight:700;line-height:1}
+.big .msg{margin-top:8px;font-size:16px;color:var(--dim)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.grid3 .panel{padding:10px;text-align:center}
+.grid3 b{display:block;font-family:var(--mono);font-size:20px;color:var(--cyan);margin-top:4px}
+.btn{width:100%;padding:15px;border-radius:12px;background:linear-gradient(180deg,#2a8fd6,#1e6fae);font-weight:800;letter-spacing:.06em;font-size:16px}
+.btn.alt{background:#0b1b2e;border:1px solid var(--line);color:var(--text)}
+.review{padding:6px 14px}
+.review div{padding:10px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.4}
+.review div:last-child{border:0}
+.review em{font-style:normal;color:var(--red);font-family:var(--mono)}
+.review u{text-decoration:none;color:var(--green);font-family:var(--mono)}
+
+.hist{padding:4px 14px}
+.hist .h{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.hist .h:last-child{border:0}
+.hist .h span:last-child{font-family:var(--mono);color:var(--cyan)}
+.note{color:var(--dim);font-size:12px;line-height:1.45;padding:0 4px}
 </style>
 </head>
 <body>
 <div class="app">
-<header><div class="brand"><div class="logo">✈</div><div><div class="eyebrow">FLIGHT TRAINING</div><h1>PILOT TRAINER <span style="color:var(--cyan)">PPL</span></h1></div></div><div class="status">● OFFLINE READY</div></header>
 
-<main id="home" class="screen active">
- <section class="hero"><div class="eyebrow">PRIVATE PILOT • NAVIGATION</div><h2>Entrena tus rumbos.<br><span style="color:var(--cyan)">Vuela con precisión.</span></h2><p>Práctica rápida de navegación, orientación y patrón de tránsito. Responde, mide tu tiempo y sigue mejorando.</p></section>
- <div class="section-label">SELECCIONA UN MÓDULO</div>
- <button class="module" onclick="start('reciprocal')"><span class="symbol">↗</span><span><strong>01 · Rumbos recíprocos</strong><small>Encuentra el rumbo opuesto de 000° a 359°</small></span><span class="chev">›</span></button>
- <button class="module" onclick="start('pattern')"><span class="symbol">⌁</span><span><strong>02 · Patrón de tránsito</strong><small>Rumbo de pista, contra básica, inicial, básico y final</small></span><span class="chev">›</span></button>
- <button class="module" onclick="start('vor')"><span class="symbol">◎</span><span><strong>03 · Navegación VOR</strong><small>Radiales, cursos TO/FROM e intercepciones básicas</small></span><span class="chev">›</span></button>
- <div class="stats"><div class="stat"><b id="totalDone">0</b><span>RESPUESTAS</span></div><div class="stat"><b id="accuracy">—</b><span>PRECISIÓN</span></div><div class="stat"><b id="best">—</b><span>RÉCORD</span></div></div>
- <div class="section-label">ACTIVIDAD RECIENTE</div><div id="history"><div class="hint">Aún no hay sesiones. ¡Inicia tu primer entrenamiento!</div></div>
-</main>
+<!-- ================= MENU ================= -->
+<section class="screen on" id="sMenu">
+  <div class="brand">
+    <svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true">
+      <circle cx="23" cy="23" r="21" fill="#0b1b2e" stroke="#3fd0ff" stroke-width="2"/>
+      <path d="M4 23a19 19 0 0 1 38 0z" fill="#1d5f9c"/>
+      <path d="M4 23a19 19 0 0 0 38 0z" fill="#7a4b22"/>
+      <line x1="4" y1="23" x2="42" y2="23" stroke="#fff" stroke-width="1.5"/>
+      <path d="M12 26h7l4 4 4-4h7" fill="none" stroke="#ffb020" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <div><h1>PILOTO PPL</h1><small>ESCUELA EN TIERRA · v2.0</small></div>
+  </div>
 
-<main id="quiz" class="screen">
- <div class="topline"><button class="back" onclick="goHome()">← Inicio</button><span class="pill" id="modeTag">MÓDULO</span></div>
- <div class="progress"><i id="progressBar"></i></div>
- <div style="display:flex;justify-content:space-between;color:var(--muted);font-size:11px"><span id="questionCount">PREGUNTA 1 / 10</span><span id="timer">00:00</span></div>
- <div class="question-card"><div class="qtype" id="qtype">RUMBOS</div><div class="question" id="question">Pregunta</div><div class="subquestion" id="explainPrompt"></div><div id="instrumentSlot"></div></div>
- <div class="answer-wrap"><input id="answer" inputmode="numeric" autocomplete="off" maxlength="3" placeholder="000" aria-label="Tu respuesta en grados"><span class="unit">GRADOS</span></div>
- <div id="feedback" class="feedback"></div>
- <button id="checkBtn" class="btn primary" onclick="checkAnswer()">COMPROBAR RESPUESTA</button>
- <div class="btnrow"><button class="btn secondary" onclick="skipQuestion()">SALTAR</button><button id="nextBtn" class="btn secondary" style="display:none" onclick="nextQuestion()">SIGUIENTE →</button></div>
- <div class="hint">Introduce tres cifras (por ejemplo, 045). Se acepta también 45.</div>
-</main>
+  <div class="mods" id="mods"></div>
 
-<main id="results" class="screen"><div class="result"><div class="eyebrow">SESIÓN COMPLETADA</div><div class="score" id="finalScore">0%</div><h2 id="resultTitle">Buen trabajo</h2><p id="resultText"></p><div class="stats"><div class="stat"><b id="rCorrect">0</b><span>ACIERTOS</span></div><div class="stat"><b id="rWrong">0</b><span>ERRORES</span></div><div class="stat"><b id="rTime">00:00</b><span>TIEMPO</span></div></div></div><button class="btn primary" onclick="goHome()">VOLVER AL INICIO</button><button class="btn secondary" style="margin-top:10px" onclick="start(lastMode)">REPETIR MÓDULO</button></main>
-<footer>Herramienta de estudio. Verifica procedimientos, nomenclatura y operación con tu instructor y cartas/publicaciones vigentes. No sustituye entrenamiento aeronáutico ni autorización ATC.</footer>
+  <div class="panel settings">
+    <div class="row"><span class="label">Patrón</span>
+      <div class="seg" id="segSide"><button data-v="L">Izquierdo</button><button data-v="R">Derecho</button><button data-v="M">Ambos</button></div></div>
+    <div class="row"><span class="label">Preguntas</span>
+      <div class="seg" id="segN"><button data-v="10">10</button><button data-v="20">20</button></div></div>
+  </div>
+  <button class="link" id="btnHist">Historial de resultados →</button>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section class="screen" id="sQuiz">
+  <div class="topbar">
+    <button class="back" id="btnQuit" aria-label="Salir">✕</button>
+    <div><div class="chip" id="qMod"></div><div class="label" id="qNum"></div></div>
+    <div class="stats">
+      <div class="stat"><i>ACIERTOS</i><b id="qScore">0</b></div>
+      <div class="stat t"><i>TIEMPO</i><b id="qTime">0.0</b></div>
+    </div>
+  </div>
+  <div class="progress"><div id="qBar"></div></div>
+  <div class="panel inst" id="qInst"></div>
+  <div class="panel qtext" id="qText"></div>
+  <div class="answer"><div class="lcd empty" id="lcd">– – –</div></div>
+  <div class="feedback" id="fb"></div>
+  <div class="pad" id="pad"></div>
+</section>
+
+<!-- ================= RESULTS ================= -->
+<section class="screen" id="sRes">
+  <div class="brand"><div><h1>RESULTADOS</h1><small id="rMod"></small></div></div>
+  <div class="panel big"><div class="pct" id="rPct"></div><div class="msg" id="rMsg"></div></div>
+  <div class="grid3">
+    <div class="panel"><span class="label">Aciertos</span><b id="rOk"></b></div>
+    <div class="panel"><span class="label">Tiempo</span><b id="rT"></b></div>
+    <div class="panel"><span class="label">Promedio</span><b id="rAvg"></b></div>
+  </div>
+  <div class="panel review" id="rRev"></div>
+  <button class="btn" id="btnAgain">REPETIR</button>
+  <button class="btn alt" id="btnMenu">MENÚ PRINCIPAL</button>
+</section>
+
+<!-- ================= HISTORY ================= -->
+<section class="screen" id="sHist">
+  <div class="topbar"><button class="back" id="btnHistBack" aria-label="Volver">←</button><div class="chip">Historial</div></div>
+  <div class="panel hist" id="histList"></div>
+  <button class="btn alt" id="btnClear">Borrar historial</button>
+  <p class="note">El historial se guarda solo en este teléfono.</p>
+</section>
+
 </div>
+
 <script>
-const $=id=>document.getElementById(id);
-const names={reciprocal:"RUMBOS RECÍPROCOS",pattern:"PATRÓN DE TRÁNSITO",vor:"NAVEGACIÓN VOR"};
-let mode="",lastMode="reciprocal",questions=[],idx=0,correct=0,wrong=0,locked=false,started=0,tick=null,elapsed=0,answered=0;
-const rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
-const norm=n=>((n%360)+360)%360;
-const fmt=n=>String(norm(n)).padStart(3,"0");
-function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active")}
-function goHome(){if(tick)clearInterval(tick);refreshStats();show("home")}
-function makeQ(m){
- if(m==="reciprocal"){let h=rand(0,359);return {type:"RECÍPROCO",q:`¿Cuál es el rumbo recíproco de ${fmt(h)}°?`,hint:"Suma o resta 180° y mantén el resultado entre 000° y 359°.",a:norm(h+180),why:`El recíproco de ${fmt(h)}° es ${fmt(norm(h+180))}°.`}}
- if(m==="pattern"){
-  // En esta práctica se usa el esquema de patrón izquierdo acordado con el alumno.
-  let p=[0,90,180,270][rand(0,3)],legs=["RUMBO DE PISTA","CONTRA BÁSICA","INICIAL","BÁSICO","FINAL"],leg=legs[rand(0,4)];
-  let a={ "RUMBO DE PISTA":p,"CONTRA BÁSICA":p-90,"INICIAL":p+180,"BÁSICO":p+90,"FINAL":p}[leg];
-  return {type:"PATRÓN IZQUIERDO · PRÁCTICA",q:`Pista ${fmt(p)}°. ¿Qué rumbo corresponde al tramo ${leg.toLowerCase()}?`,hint:"Usa el esquema de nomenclatura de tu curso. Confirma orientación y terminología con tu instructor.",a:norm(a),why:`Con el esquema de práctica seleccionado, ${leg.toLowerCase()} corresponde a ${fmt(a)}°.`}
- }
- let kind=rand(0,3),r=rand(0,359),delta=rand(15,60),course=norm(r+180),ans;
- if(kind===0)return {type:"VOR · RADIAL A CURSO TO",q:`Estás en el radial ${fmt(r)}° de un VOR. ¿Qué curso te lleva hacia la estación (TO)?`,hint:"El radial se define desde la estación hacia afuera.",a:course,why:`El curso inbound/TO es el recíproco del radial: ${fmt(course)}°.`};
- if(kind===1)return {type:"VOR · CURSO FROM",q:`Seleccionas un curso FROM de ${fmt(r)}°. ¿En qué radial de la estación estás volando?`,hint:"FROM indica que te alejas de la estación por ese curso.",a:r,why:`El curso FROM coincide con el radial: ${fmt(r)}°.`};
- if(kind===2)return {type:"VOR · RADIAL",q:`La aeronave está al ${fmt(r)}° magnético desde la estación. ¿Cuál es el radial?`,hint:"El radial se nombra por su dirección magnética desde el VOR.",a:r,why:`El radial es ${fmt(r)}°.`};
- return {type:"VOR · INTERCEPCIÓN BÁSICA",q:`Vas en rumbo ${fmt(r)}° y necesitas interceptar un curso ${fmt(norm(r+delta))}° con un ángulo de intercepción de ${delta}°. ¿Qué rumbo inicial usarías para interceptarlo por el lado indicado?`,hint:"Ejercicio aritmético simplificado: rumbo actual + ángulo de intercepción. No incorpora viento, posición relativa ni indicaciones CDI.",a:norm(r+delta),why:`En este ejercicio simplificado: ${fmt(r)}° + ${delta}° = ${fmt(norm(r+delta))}°. En vuelo real, determina el sentido de interceptación con la posición, el CDI y las instrucciones aplicables.`};
+/* ============ utilidades ============ */
+const $ = s => document.querySelector(s);
+const norm = h => { h = ((Math.round(h) % 360) + 360) % 360; return h === 0 ? 360 : h; };
+const fmt = h => String(norm(h)).padStart(3, '0');
+const pad2 = n => String(n).padStart(2, '0');
+const recip = h => norm(h + 180);
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const rad = d => d * Math.PI / 180;
+const pol = (cx, cy, r, d) => [cx + r * Math.sin(rad(d)), cy - r * Math.cos(rad(d))];
+
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('ptppl_' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('ptppl_' + k, JSON.stringify(v)); } catch (e) {} }
+};
+let settings = Object.assign({ side: 'L', n: 10 }, store.get('settings', {}));
+
+const MODS = {
+  recip:  { name: 'Recíprocos',          desc: 'Rumbos opuestos y cabeceras de pista' },
+  patron: { name: 'Patrón de tránsito',  desc: 'Rumbo de pista, contra básica, inicial, básico y final' },
+  vor:    { name: 'Radiales VOR',        desc: 'TO / FROM, CDI e intercepciones' },
+  mix:    { name: 'Examen mixto',        desc: 'Preguntas de los tres módulos' }
+};
+
+/* ============ dibujos SVG ============ */
+const C = { cyan: '#3fd0ff', amber: '#ffb020', green: '#3ddc84', red: '#ff5c5c', dim: '#8aa4c2', line: '#25466b', white: '#fff' };
+const PLANE = 'M0,-14 L2,-4 L13,2 L13,5 L2,2 L1.5,9 L5,12 L5,14 L0,13 L-5,14 L-5,12 L-1.5,9 L-2,2 L-13,5 L-13,2 L-2,-4 Z';
+const DEFS = `<defs>
+ <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${C.cyan}"/></marker>
+ <marker id="aa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${C.amber}"/></marker>
+ <marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${C.green}"/></marker>
+</defs>`;
+const svg = inner => `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">${DEFS}${inner}</svg>`;
+
+// rosa de rumbos. rot = valor que queda arriba
+function rose(cx, cy, r, rot = 0) {
+  let s = `<circle cx="${cx}" cy="${cy}" r="${r + 2}" fill="#07111e" stroke="${C.line}" stroke-width="2"/>`;
+  for (let d = 0; d < 360; d += 5) {
+    const a = d - rot, len = d % 30 === 0 ? 12 : d % 10 === 0 ? 8 : 4;
+    const [x1, y1] = pol(cx, cy, r, a), [x2, y2] = pol(cx, cy, r - len, a);
+    s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${d % 30 === 0 ? C.white : C.dim}" stroke-width="${d % 30 === 0 ? 2 : 1}"/>`;
+    if (d % 30 === 0) {
+      const lab = { 0: 'N', 90: 'E', 180: 'S', 270: 'W' }[d] || String(d / 10);
+      const [tx, ty] = pol(cx, cy, r - 24, a);
+      s += `<text x="${tx}" y="${ty}" fill="${'NESW'.includes(lab) ? C.amber : C.white}" font-size="14" font-weight="700" font-family="ui-monospace,Menlo,monospace" text-anchor="middle" dominant-baseline="central">${lab}</text>`;
+    }
+  }
+  return s;
 }
-function start(m){mode=m;lastMode=m;questions=Array.from({length:10},()=>makeQ(m));idx=0;correct=0;wrong=0;answered=0;elapsed=0;started=Date.now();if(tick)clearInterval(tick);tick=setInterval(()=>{elapsed=Math.floor((Date.now()-started)/1000);$("timer").textContent=timeFmt(elapsed)},500);$("modeTag").textContent=names[m];show("quiz");render()}
-function timeFmt(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
-function render(){let q=questions[idx];locked=false;$("questionCount").textContent=`PREGUNTA ${idx+1} / ${questions.length}`;$("progressBar").style.width=(idx/questions.length*100)+"%";$("qtype").textContent=q.type;$("question").textContent=q.q;$("explainPrompt").textContent=q.hint;$("answer").value="";$("answer").disabled=false;$("feedback").className="feedback";$("feedback").textContent="";$("checkBtn").style.display="block";$("nextBtn").style.display="none";$("answer").focus();$("instrumentSlot").innerHTML=q.type.includes("VOR")?`<div class="instrument"><span class="north">N</span><span class="heading">${fmt(q.a)}°</span><i class="needle" style="transform:translateX(-50%) rotate(${q.a}deg)"></i></div>`:""}
-function checkAnswer(){if(locked)return;let val=$("answer").value.trim().replace(/[°\s]/g,"");if(!/^\d{1,3}$/.test(val)){showFeedback(false,"Escribe un rumbo válido entre 000 y 359.");return}let n=Number(val);if(n<0||n>359){showFeedback(false,"El rumbo debe estar entre 000° y 359°.");return}locked=true;answered++;let q=questions[idx],ok=norm(n)===q.a;if(ok)correct++;else wrong++;showFeedback(ok,(ok?"¡Correcto! ":"No es correcto. ")+q.why);$("answer").disabled=true;$("checkBtn").style.display="none";$("nextBtn").style.display="block"}
-function showFeedback(ok,msg){$("feedback").textContent=msg;$("feedback").className="feedback show "+(ok?"good":"bad")}
-function skipQuestion(){if(!locked){wrong++;answered++;}nextQuestion()}
-function nextQuestion(){if(idx<questions.length-1){idx++;render()}else finish()}
-function finish(){clearInterval(tick);elapsed=Math.floor((Date.now()-started)/1000);let pct=Math.round(correct/questions.length*100);$("finalScore").textContent=pct+"%";$("resultTitle").textContent=pct>=90?"Excelente precisión":pct>=70?"Buen progreso":"Sigue practicando";$("resultText").textContent=`Terminaste ${names[mode].toLowerCase()} en ${timeFmt(elapsed)}. La constancia y la comprensión del procedimiento importan más que la velocidad.`;$("rCorrect").textContent=correct;$("rWrong").textContent=wrong;$("rTime").textContent=timeFmt(elapsed);saveSession({mode,correct,wrong,total:questions.length,pct,time:elapsed,date:new Date().toISOString()});show("results")}
-$("answer").addEventListener("keydown",e=>{if(e.key==="Enter"){if(locked)nextQuestion();else checkAnswer()}});
-function getHistory(){try{return JSON.parse(localStorage.getItem("pt_history")||"[]")}catch(e){return []}}
-function saveSession(s){let h=getHistory();h.unshift(s);localStorage.setItem("pt_history",JSON.stringify(h.slice(0,30)));refreshStats()}
-function refreshStats(){let h=getHistory(),done=h.reduce((a,x)=>a+x.total,0),c=h.reduce((a,x)=>a+x.correct,0);$("totalDone").textContent=done;$("accuracy").textContent=done?Math.round(c/done*100)+"%":"—";$("best").textContent=h.length?Math.max(...h.map(x=>x.pct))+"%":"—";$("history").innerHTML=h.length?h.slice(0,5).map(x=>`<div class="history-row"><span>${names[x.mode]} · ${new Date(x.date).toLocaleDateString("es-MX")}</span><span>${x.pct}%</span></div>`).join(""):'<div class="hint">Aún no hay sesiones. ¡Inicia tu primer entrenamiento!</div>'}
-refreshStats();
-if("serviceWorker" in navigator && location.protocol!=="file:"){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}))}
+const plane = (x, y, hdg, col = C.white, sc = 1) => `<path d="${PLANE}" fill="${col}" stroke="#07111e" stroke-width="1" transform="translate(${x},${y}) rotate(${hdg}) scale(${sc})"/>`;
+const tag = (x, y, t, col = C.cyan, size = 13) => `<text x="${x}" y="${y}" fill="${col}" font-size="${size}" font-weight="700" font-family="ui-monospace,Menlo,monospace" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#07111e" stroke-width="4">${t}</text>`;
+
+// rosa con flecha de rumbo y (al revelar) flecha recíproca
+function drawCompass(h, ans, revealed) {
+  let s = rose(150, 150, 130);
+  const [x, y] = pol(150, 150, 92, h);
+  s += `<line x1="150" y1="150" x2="${x}" y2="${y}" stroke="${C.cyan}" stroke-width="4" marker-end="url(#ah)"/>`;
+  const [lx, ly] = pol(150, 150, 60, h + 18);
+  s += tag(lx, ly, fmt(h));
+  if (revealed) {
+    const [x2, y2] = pol(150, 150, 92, ans);
+    s += `<line x1="150" y1="150" x2="${x2}" y2="${y2}" stroke="${C.green}" stroke-width="4" stroke-dasharray="7 5" marker-end="url(#ag)"/>`;
+    const [mx, my] = pol(150, 150, 60, ans + 18);
+    s += tag(mx, my, fmt(ans), C.green);
+  }
+  s += `<circle cx="150" cy="150" r="5" fill="${C.amber}"/>`;
+  return svg(s);
+}
+
+// pista y patrón de tránsito vistos desde arriba (norte arriba)
+function drawPattern(rw, side, hl, legs, revealed, reverse) {
+  const H = rw * 10, sgn = side === 'L' ? -1 : 1, xo = sgn * 110;
+  const ct = Math.cos(rad(H)), st = Math.sin(rad(H)), K = 0.86;
+  // coordenadas locales: y hacia el rumbo de despegue, x a la derecha
+  const P = (x, y) => { x -= xo / 2; return [150 + K * (x * ct + y * st), 150 + K * (x * st - y * ct)]; };
+  const seg = [[[0, 42], [0, 95]], [[0, 95], [xo, 95]], [[xo, 95], [xo, -95]], [[xo, -95], [0, -95]], [[0, -95], [0, -42]]];
+  let s = '';
+  // norte
+  s += `<g transform="translate(272,30)"><path d="M0,-16 L6,4 L0,0 L-6,4z" fill="${C.amber}"/>${tag(0, 14, 'N', C.amber, 11)}</g>`;
+  // pista
+  const [a1, b1] = P(0, -40), [a2, b2] = P(0, 40);
+  s += `<line x1="${a1}" y1="${b1}" x2="${a2}" y2="${b2}" stroke="#4a5a6c" stroke-width="16" stroke-linecap="butt"/>`;
+  s += `<line x1="${a1}" y1="${b1}" x2="${a2}" y2="${b2}" stroke="#fff" stroke-width="1.5" stroke-dasharray="6 6"/>`;
+  const [n1x, n1y] = P(0, -54), [n2x, n2y] = P(0, 54);
+  const opp = rw > 18 ? rw - 18 : rw + 18;
+  s += (reverse && !revealed) ? tag(n1x, n1y, '??', C.amber, 12) : tag(n1x, n1y, pad2(rw), C.white, 12) + tag(n2x, n2y, pad2(opp), C.dim, 11);
+  // tramos
+  seg.forEach((g, i) => {
+    const [x1, y1] = P(...g[0]), [x2, y2] = P(...g[1]);
+    const on = i === hl;
+    const col = on ? (revealed ? C.green : C.amber) : C.cyan;
+    s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="${on ? 4 : 2.5}" ${on ? '' : 'opacity=".75"'} marker-end="url(#${on ? (revealed ? 'ag' : 'aa') : 'ah'})"/>`;
+  });
+  // etiquetas
+  const labPos = [[0, 112], [xo / 2, 112], [xo + sgn * 4, 0], [xo / 2, -112], [0, -78]];
+  const off = [[sgn * -22, 0], [0, 0], [sgn * 26, 0], [0, 0], [sgn * -26, 0]];
+  legs.forEach((L, i) => {
+    const [x, y] = P(labPos[i][0] + off[i][0], labPos[i][1] + off[i][1]);
+    const on = i === hl;
+    let t;
+    if (reverse) t = (revealed || on) ? fmt(L.hdg) : '';
+    else if (on) t = revealed ? fmt(L.hdg) : '???';
+    else t = revealed ? fmt(L.hdg) : (i === 0 || i === 4 ? fmt(L.hdg) : '');
+    if (!t) return;
+    s += tag(x, y, t, on ? (revealed ? C.green : C.amber) : C.cyan, on ? 15 : 12);
+  });
+  return svg(s);
+}
+
+// mapa con estación VOR y avión sobre un radial
+function drawVORMap(R, hdg, revealed, note) {
+  let s = rose(150, 150, 130);
+  const [ex, ey] = pol(150, 150, 128, R);
+  s += `<line x1="150" y1="150" x2="${ex}" y2="${ey}" stroke="${C.cyan}" stroke-width="2" stroke-dasharray="5 4"/>`;
+  const [px, py] = pol(150, 150, 72, R);
+  s += plane(px, py, revealed ? hdg : hdg, revealed ? C.green : C.white, 1.1);
+  const [lx, ly] = pol(150, 150, 102, R + 9);
+  s += tag(lx, ly, 'R-' + fmt(R), C.cyan, 12);
+  // estación
+  s += `<g transform="translate(150,150)"><polygon points="0,-11 9.5,-5.5 9.5,5.5 0,11 -9.5,5.5 -9.5,-5.5" fill="#07111e" stroke="${C.amber}" stroke-width="2"/><circle r="2.5" fill="${C.amber}"/></g>`;
+  if (revealed && note) s += tag(150, 182, note, C.green, 13);
+  return svg(s);
+}
+
+// CDI: OBS, aguja y bandera
+function drawCDI(obs, flag, dots, revealed, ans) {
+  let s = `<circle cx="150" cy="150" r="146" fill="#1a1f26" stroke="#3a4552" stroke-width="3"/>`;
+  s += rose(150, 150, 128, obs);
+  s += `<circle cx="150" cy="150" r="88" fill="#0d1218" stroke="#2a3340"/>`;
+  // índice de curso
+  s += `<path d="M150,12 l-8,-10 h16z" fill="${C.amber}" transform="translate(0,14)"/>`;
+  // puntos
+  for (let i = -5; i <= 5; i++) if (i) s += `<circle cx="${150 + i * 15}" cy="150" r="${Math.abs(i) === 5 ? 3.5 : 3}" fill="none" stroke="#fff" stroke-width="1.6"/>`;
+  s += `<circle cx="150" cy="150" r="9" fill="none" stroke="#fff" stroke-width="1.6"/>`;
+  // bandera
+  if (flag === 'TO') s += `<path d="M150,108 l14,18 h-28z" fill="#fff"/><text x="150" y="139" fill="#fff" font-size="13" font-weight="800" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">TO</text>`;
+  else s += `<path d="M150,192 l14,-18 h-28z" fill="#fff"/><text x="150" y="168" fill="#fff" font-size="13" font-weight="800" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">FROM</text>`;
+  // aguja
+  const nx = 150 + Math.max(-5, Math.min(5, dots)) * 15;
+  s += `<line x1="${nx}" y1="66" x2="${nx}" y2="234" stroke="#fff" stroke-width="4" stroke-linecap="round"/>`;
+  // ventana OBS
+  s += `<rect x="112" y="250" width="76" height="30" rx="6" fill="#020a12" stroke="${C.line}"/>`;
+  s += `<text x="150" y="266" fill="${C.green}" font-size="18" font-weight="700" text-anchor="middle" dominant-baseline="central" font-family="ui-monospace,Menlo,monospace">${fmt(obs)}</text>`;
+  s += `<circle cx="38" cy="262" r="20" fill="#2a3340" stroke="#4a5562"/>${tag(38, 262, 'OBS', C.dim, 9)}`;
+  if (revealed && ans) s += tag(150, 92, ans, C.green, 14);
+  return svg(s);
+}
+
+/* ============ generadores de preguntas ============ */
+function genRecip() {
+  if (Math.random() < 0.3) {
+    const n = rnd(1, 36), opp = n > 18 ? n - 18 : n + 18;
+    return {
+      mod: 'recip', kind: 'num', answer: opp,
+      text: `Despegas por la pista <b>${pad2(n)}</b>. ¿Cuál es el número de la cabecera opuesta?`,
+      explain: `${pad2(n)} ${n > 18 ? '− 18' : '+ 18'} = <b>${pad2(opp)}</b>. El número de pista es su rumbo magnético sin el último cero, así que el recíproco se calcula con ±18.`,
+      draw: r => drawCompass(n * 10, opp * 10, r)
+    };
+  }
+  const h = Math.random() < 0.5 ? rnd(1, 72) * 5 : rnd(1, 360), a = recip(h);
+  const tip = h <= 180 ? `${fmt(h)} + 180 = ${fmt(a)}` : `${fmt(h)} − 180 = ${fmt(a)}`;
+  return {
+    mod: 'recip', kind: 'hdg', answer: a,
+    text: `Rumbo <b>${fmt(h)}°</b>. ¿Cuál es su recíproco?`,
+    explain: `${tip}. Si el rumbo es 180 o menos, suma 180; si es mayor, resta 180. Truco mental: +200 −20, o −200 +20.`,
+    draw: r => drawCompass(h, a, r)
+  };
+}
+
+const SIDE_NAME = { L: 'izquierdo', R: 'derecho' };
+function genPattern() {
+  const side = settings.side === 'M' ? pick(['L', 'R']) : settings.side;
+  const s = side === 'L' ? -1 : 1, giro = side === 'L' ? 'izquierda' : 'derecha';
+  const rw = rnd(1, 36), H = rw * 10;
+  const legs = [
+    { name: 'Rumbo de pista', hdg: norm(H) },
+    { name: 'Contra básica', hdg: norm(H + s * 90) },
+    { name: 'Inicial', hdg: norm(H + 180) },
+    { name: 'Básico', hdg: norm(H - s * 90) },
+    { name: 'Final', hdg: norm(H) }
+  ];
+  const why = [
+    `Después del despegue mantienes el rumbo de la pista ${pad2(rw)}: <b>${fmt(H)}</b>.`,
+    `Contra básica = primer viraje de 90° a la ${giro}: ${fmt(H)} ${s < 0 ? '−' : '+'} 90 = <b>${fmt(legs[1].hdg)}</b>.`,
+    `Inicial es paralelo a la pista en sentido contrario, o sea el recíproco: ${fmt(H)} ${H <= 180 ? '+' : '−'} 180 = <b>${fmt(legs[2].hdg)}</b>.`,
+    `Básico es el recíproco de contra básica: ${fmt(H)} ${s < 0 ? '+' : '−'} 90 = <b>${fmt(legs[3].hdg)}</b>.`,
+    `Final vuelve a ser el rumbo de pista: <b>${fmt(H)}</b>.`
+  ];
+  if (Math.random() < 0.25) {
+    const i = pick([1, 2, 3]);
+    return {
+      mod: 'patron', kind: 'hdg', answer: norm(H),
+      text: `Patrón <b>${SIDE_NAME[side]}</b>. Vas en <b>${legs[i].name}</b> con rumbo <b>${fmt(legs[i].hdg)}°</b>. ¿Cuál es el rumbo de pista?`,
+      explain: `Pista ${pad2(rw)} = <b>${fmt(H)}</b>. ` + why[i],
+      draw: r => drawPattern(rw, side, i, legs, r, true)
+    };
+  }
+  const i = pick([1, 1, 2, 2, 3, 3, 0, 4]);
+  return {
+    mod: 'patron', kind: 'hdg', answer: legs[i].hdg,
+    text: `Pista <b>${pad2(rw)}</b>, patrón <b>${SIDE_NAME[side]}</b>. ¿Qué rumbo llevas en <b>${legs[i].name}</b>?`,
+    explain: why[i],
+    draw: r => drawPattern(rw, side, i, legs, r)
+  };
+}
+
+function genVOR() {
+  const t = pick(['A', 'B', 'C', 'D', 'E', 'E']);
+  const R = Math.random() < 0.6 ? rnd(1, 72) * 5 : rnd(1, 360);
+  if (t === 'A') {
+    const a = recip(R);
+    return {
+      mod: 'vor', kind: 'hdg', answer: a,
+      text: `Estás sobre el radial <b>${fmt(R)}</b>. ¿Qué curso seleccionas en el OBS para volar directo <b>hacia</b> la estación (bandera TO)?`,
+      explain: `Los radiales siempre salen desde la estación. Para ir hacia ella vuelas el recíproco: <b>${fmt(a)}</b>. Con OBS ${fmt(a)} verás TO y la aguja centrada.`,
+      draw: r => drawVORMap(R, a, r, r ? 'CRS ' + fmt(a) + ' TO' : '')
+    };
+  }
+  if (t === 'B') {
+    return {
+      mod: 'vor', kind: 'hdg', answer: norm(R),
+      text: `Quieres alejarte de la estación por el radial <b>${fmt(R)}</b>. ¿Qué curso seleccionas en el OBS (bandera FROM)?`,
+      explain: `Un radial apunta hacia afuera de la estación. Para alejarte por el radial ${fmt(R)} seleccionas y vuelas <b>${fmt(R)}</b>, con bandera FROM.`,
+      draw: r => drawVORMap(R, R, r, r ? 'CRS ' + fmt(R) + ' FROM' : '')
+    };
+  }
+  if (t === 'C' || t === 'D') {
+    const flag = t === 'C' ? 'TO' : 'FROM', a = flag === 'TO' ? recip(R) : norm(R);
+    return {
+      mod: 'vor', kind: 'hdg', answer: a,
+      text: `El CDI muestra OBS <b>${fmt(R)}</b>, aguja centrada y bandera <b>${flag}</b>. ¿En qué radial estás?`,
+      explain: flag === 'TO'
+        ? `Con TO, el curso ${fmt(R)} te lleva hacia la estación, así que estás del lado opuesto. Tu radial es el recíproco: <b>${fmt(a)}</b>.`
+        : `Con FROM y la aguja centrada, estás sobre el mismo radial que marca el OBS: <b>${fmt(a)}</b>.`,
+      draw: r => drawCDI(R, flag, 0, r, r ? 'R-' + fmt(a) : '')
+    };
+  }
+  // E: intercepción
+  const flag = pick(['TO', 'FROM']), dir = pick(['L', 'R']), ang = pick([30, 45, 45]);
+  const a = dir === 'R' ? norm(R + ang) : norm(R - ang);
+  const dots = (dir === 'R' ? 1 : -1) * pick([2.5, 3, 4, 5]);
+  return {
+    mod: 'vor', kind: 'hdg', answer: a,
+    text: `CDI: OBS <b>${fmt(R)}</b>, bandera <b>${flag}</b>, aguja desviada a la <b>${dir === 'R' ? 'derecha' : 'izquierda'}</b>. Tu rumbo es aproximadamente el del OBS. ¿Qué rumbo tomas para interceptar el curso a <b>${ang}°</b>?`,
+    explain: `“Vuela hacia la aguja”: la aguja a la ${dir === 'R' ? 'derecha' : 'izquierda'} indica que el curso está a tu ${dir === 'R' ? 'derecha' : 'izquierda'}. ${fmt(R)} ${dir === 'R' ? '+' : '−'} ${ang} = <b>${fmt(a)}</b>. Cuando la aguja empiece a centrarse, vira al rumbo ${fmt(R)}. Esto aplica cuando tu rumbo coincide más o menos con el OBS; si vuelas en sentido contrario, la indicación se invierte.`,
+    draw: r => drawCDI(R, flag, dots, r, r ? 'HDG ' + fmt(a) : '')
+  };
+}
+const GEN = { recip: genRecip, patron: genPattern, vor: genVOR };
+
+/* ============ íconos del menú ============ */
+const ICONS = {
+  recip: `<svg width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="17" r="14" fill="none" stroke="${C.dim}" stroke-width="2"/><path d="M17 17V5" stroke="${C.cyan}" stroke-width="3" stroke-linecap="round"/><path d="M17 17v12" stroke="${C.green}" stroke-width="3" stroke-dasharray="3 3" stroke-linecap="round"/></svg>`,
+  patron: `<svg width="34" height="34" viewBox="0 0 34 34"><rect x="20" y="9" width="5" height="16" fill="#4a5a6c"/><path d="M22.5 8V4H6v26h16.5V26" fill="none" stroke="${C.cyan}" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
+  vor: `<svg width="34" height="34" viewBox="0 0 34 34"><polygon points="17,9 24,13 24,21 17,25 10,21 10,13" fill="none" stroke="${C.amber}" stroke-width="2"/><circle cx="17" cy="17" r="2" fill="${C.amber}"/><path d="M17 17L30 4" stroke="${C.cyan}" stroke-width="2" stroke-dasharray="3 2"/></svg>`,
+  mix: `<svg width="34" height="34" viewBox="0 0 34 34"><rect x="6" y="5" width="22" height="25" rx="3" fill="none" stroke="${C.dim}" stroke-width="2"/><path d="M11 13l3 3 6-6M11 23h12" stroke="${C.green}" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`
+};
+
+/* ============ estado y flujo ============ */
+let S = null, entry = '', timer = null;
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(e => e.classList.toggle('on', e.id === id));
+  window.scrollTo(0, 0);
+}
+
+function renderMenu() {
+  const hist = store.get('hist', []);
+  $('#mods').innerHTML = Object.entries(MODS).map(([k, m]) => {
+    const best = hist.filter(h => h.mod === k).reduce((b, h) => Math.max(b, h.pct), -1);
+    return `<button class="panel mod" data-mod="${k}"><div class="ico">${ICONS[k]}</div><div><b>${m.name}</b><span>${m.desc}</span></div>
+      ${best >= 0 ? `<div class="best"><i>MEJOR</i>${best}%</div>` : ''}</button>`;
+  }).join('');
+  document.querySelectorAll('#segSide button').forEach(b => b.classList.toggle('on', b.dataset.v === settings.side));
+  document.querySelectorAll('#segN button').forEach(b => b.classList.toggle('on', +b.dataset.v === settings.n));
+}
+
+function start(mod) {
+  const n = settings.n, qs = [];
+  let last = '';
+  for (let i = 0; i < n; i++) {
+    let q, tries = 0;
+    do { q = GEN[mod === 'mix' ? pick(['recip', 'patron', 'vor']) : mod](); tries++; }
+    while (q.text === last && tries < 10);
+    last = q.text; qs.push(q);
+  }
+  S = { mod, qs, i: 0, ok: 0, times: [], misses: [], t0: 0, done: false, startAll: Date.now() };
+  show('sQuiz');
+  renderQ();
+  clearInterval(timer);
+  timer = setInterval(tick, 100);
+}
+
+function renderQ() {
+  const q = S.qs[S.i];
+  S.done = false; entry = ''; S.t0 = Date.now();
+  $('#qMod').textContent = MODS[q.mod].name;
+  $('#qNum').textContent = `PREGUNTA ${S.i + 1} / ${S.qs.length}`;
+  $('#qScore').textContent = S.ok;
+  $('#qBar').style.width = (S.i / S.qs.length * 100) + '%';
+  $('#qInst').innerHTML = q.draw(false);
+  $('#qText').innerHTML = q.text;
+  $('#fb').className = 'feedback'; $('#fb').innerHTML = '';
+  updLCD();
+  renderPad();
+}
+
+function tick() {
+  if (!S || S.done) return;
+  $('#qTime').textContent = ((Date.now() - S.t0) / 1000).toFixed(1);
+}
+
+function updLCD(bad) {
+  const q = S.qs[S.i], len = q.kind === 'num' ? 2 : 3;
+  const l = $('#lcd');
+  l.textContent = entry ? entry.padEnd(len, '_') : (len === 2 ? '– –' : '– – –');
+  l.className = 'lcd' + (entry ? '' : ' empty') + (bad ? ' bad' : '');
+}
+
+function renderPad() {
+  const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'del', '0', 'go'];
+  $('#pad').innerHTML = keys.map(k =>
+    k === 'del' ? `<button class="del" data-k="del">⌫</button>` :
+    k === 'go' ? `<button class="go${S.done ? ' next' : ''}" data-k="go">${S.done ? (S.i + 1 < S.qs.length ? 'SIGUIENTE' : 'VER RESULTADOS') : 'COMPROBAR'}</button>` :
+    `<button data-k="${k}">${k}</button>`).join('');
+}
+
+function press(k) {
+  if (!S) return;
+  if (k === 'go') return S.done ? next() : check();
+  if (S.done) return;
+  const max = S.qs[S.i].kind === 'num' ? 2 : 3;
+  if (k === 'del') entry = entry.slice(0, -1);
+  else if (entry.length < max) entry += k;
+  updLCD();
+}
+
+function check() {
+  if (!entry) return;
+  const q = S.qs[S.i], v = parseInt(entry, 10);
+  const valid = q.kind === 'num' ? (v >= 1 && v <= 36) : (v >= 0 && v <= 360);
+  if (!valid) { updLCD(true); setTimeout(() => updLCD(), 500); return; }
+  const ok = q.kind === 'num' ? v === q.answer : norm(v) === norm(q.answer);
+  const secs = (Date.now() - S.t0) / 1000;
+  S.times.push(secs); S.done = true;
+  if (ok) S.ok++; else S.misses.push({ q, v });
+  const correctTxt = q.kind === 'num' ? pad2(q.answer) : fmt(q.answer);
+  $('#fb').className = 'feedback ' + (ok ? 'ok' : 'no');
+  $('#fb').innerHTML = `<strong>${ok ? '✓ Correcto' : '✗ Incorrecto. La respuesta es ' + correctTxt}</strong>${q.explain}`;
+  $('#qInst').innerHTML = q.draw(true);
+  $('#qScore').textContent = S.ok;
+  $('#qTime').textContent = secs.toFixed(1);
+  $('#lcd').className = 'lcd' + (ok ? '' : ' bad');
+  renderPad();
+  setTimeout(() => $('#fb').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+
+function next() {
+  if (S.i + 1 < S.qs.length) { S.i++; renderQ(); }
+  else finish();
+}
+
+function finish() {
+  clearInterval(timer);
+  const n = S.qs.length, pct = Math.round(S.ok / n * 100);
+  const total = S.times.reduce((a, b) => a + b, 0), avg = total / n;
+  $('#rMod').textContent = MODS[S.mod].name.toUpperCase();
+  $('#rPct').textContent = pct + '%';
+  $('#rPct').style.color = pct >= 90 ? C.green : pct >= 70 ? C.amber : C.red;
+  $('#rMsg').textContent = pct === 100 ? 'Perfecto. Listo para volar.' : pct >= 90 ? 'Excelente. Muy bien preparado.' :
+    pct >= 70 ? 'Bien. Repasa los errores de abajo.' : 'Hay que practicar más. Revisa las explicaciones.';
+  $('#rOk').textContent = `${S.ok}/${n}`;
+  $('#rT').textContent = total < 60 ? total.toFixed(0) + 's' : Math.floor(total / 60) + 'm' + pad2(Math.round(total % 60));
+  $('#rAvg').textContent = avg.toFixed(1) + 's';
+  $('#rRev').innerHTML = S.misses.length
+    ? '<div class="label" style="border:0;padding-bottom:0">Errores</div>' + S.misses.map(m =>
+        `<div>${m.q.text}<br>Tu respuesta: <em>${m.q.kind === 'num' ? pad2(m.v) : fmt(m.v)}</em> · Correcta: <u>${m.q.kind === 'num' ? pad2(m.q.answer) : fmt(m.q.answer)}</u></div>`).join('')
+    : '<div style="color:var(--green)">Sin errores en esta sesión.</div>';
+  const hist = store.get('hist', []);
+  hist.unshift({ mod: S.mod, pct, ok: S.ok, n, avg: +avg.toFixed(1), d: Date.now() });
+  store.set('hist', hist.slice(0, 50));
+  show('sRes');
+}
+
+function renderHist() {
+  const hist = store.get('hist', []);
+  $('#histList').innerHTML = hist.length ? hist.map(h => {
+    const d = new Date(h.d);
+    return `<div class="h"><span>${MODS[h.mod].name}<br><small style="color:var(--dim)">${d.toLocaleDateString('es-MX')} ${d.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })} · ${h.avg}s/preg</small></span><span>${h.ok}/${h.n} · ${h.pct}%</span></div>`;
+  }).join('') : '<div class="h"><span style="color:var(--dim)">Todavía no hay sesiones.</span></div>';
+  show('sHist');
+}
+
+/* ============ eventos ============ */
+$('#mods').addEventListener('click', e => { const b = e.target.closest('[data-mod]'); if (b) start(b.dataset.mod); });
+$('#segSide').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; settings.side = b.dataset.v; store.set('settings', settings); renderMenu(); });
+$('#segN').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; settings.n = +b.dataset.v; store.set('settings', settings); renderMenu(); });
+$('#pad').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (b) press(b.dataset.k); });
+$('#btnQuit').addEventListener('click', () => { clearInterval(timer); S = null; renderMenu(); show('sMenu'); });
+$('#btnAgain').addEventListener('click', () => start(S.mod));
+$('#btnMenu').addEventListener('click', () => { S = null; renderMenu(); show('sMenu'); });
+$('#btnHist').addEventListener('click', renderHist);
+$('#btnHistBack').addEventListener('click', () => { renderMenu(); show('sMenu'); });
+let clearArmed = false;
+$('#btnClear').addEventListener('click', e => {
+  if (!clearArmed) { clearArmed = true; e.target.textContent = 'Toca otra vez para confirmar'; setTimeout(() => { clearArmed = false; e.target.textContent = 'Borrar historial'; }, 3000); return; }
+  store.set('hist', []); clearArmed = false; e.target.textContent = 'Borrar historial'; renderHist();
+});
+document.addEventListener('keydown', e => {
+  if (!$('#sQuiz').classList.contains('on')) return;
+  if (/^[0-9]$/.test(e.key)) press(e.key);
+  else if (e.key === 'Backspace') press('del');
+  else if (e.key === 'Enter') { e.preventDefault(); press('go'); }
+});
+// evita el zoom por doble toque en iOS
+let lastTouch = 0;
+document.addEventListener('touchend', e => { const n = Date.now(); if (n - lastTouch < 350 && e.target.closest('button')) e.preventDefault(); lastTouch = n; }, { passive: false });
+
+renderMenu();
+
+// modo sin conexión (funciona al publicarla en GitHub Pages)
+try {
+  if ('serviceWorker' in navigator && location.protocol === 'https:' && !location.hostname.endsWith('claude.ai') && !location.hostname.includes('claudeusercontent'))
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+} catch (e) {}
 </script>
-</body></html>
+</body>
+</html>
